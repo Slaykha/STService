@@ -1,3 +1,4 @@
 Database Username: admin
 Database Pass: HkJpLyv1MclTvMIc
 
+mongodb+srv://admin:HkJpLyv1MclTvMIc@spendingtraacker.ybzvy6n.mongodb.net/test?authSource=admin&replicaSet=atlas-xgjvpl-shard-0&readPreference=primary&appname=MongoDB%20Compass&ssl=true
