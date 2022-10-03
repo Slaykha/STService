@@ -14,6 +14,48 @@ type Config struct {
 
 var config Config
 
+func main() {
+	fmt.Println("Service Starting...")
+	setConfig()
+
+	repository := NewRepository(config.DBReplicaSetUrl)
+	service := NewService(repository)
+	API := NewAPI(service)
+
+	app := SetupApp(API)
+
+	fmt.Println("Order List service started at ", config.AppPort, "  ...")
+
+	app.Listen(config.AppPort)
+}
+
+func SetupApp(API *Api) *fiber.App {
+	app := fiber.New()
+
+	app.Get("/status", func(c *fiber.Ctx) {
+		c.Status(fiber.StatusOK)
+	})
+
+	//User
+	app.Post("/user/register", API.HandleUserCreate)
+	app.Post("/user/login", API.HandleUserLogin)
+
+	//Spending
+	app.Post("/spending", API.HandleCreateSpending)
+	app.Get("/spendings", API.HandleGetSpendings)
+
+	return app
+}
+
+func setConfig() {
+	config = Config{
+		AppPort:         12345,
+		Host:            "http://localhost:12345",
+		DBReplicaSetUrl: "mongodb+srv://admin:HkJpLyv1MclTvMIc@spendingtraacker.ybzvy6n.mongodb.net/?retryWrites=true&w=majority",
+	}
+}
+
+//Also can do like this
 /* func createSpendingEndpoint(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 	var spending models.Spending
@@ -61,39 +103,3 @@ func getSpendingsEndpoint(response http.ResponseWriter, request *http.Request) {
 	}
 	json.NewEncoder(response).Encode(spendings)
 } */
-
-func main() {
-	fmt.Println("Service Starting...")
-	setConfig()
-
-	repository := NewRepository(config.DBReplicaSetUrl)
-	service := NewService(repository)
-	API := NewAPI(service)
-
-	app := SetupApp(API)
-
-	fmt.Println("Order List service started at ", config.AppPort, "  ...")
-
-	app.Listen(config.AppPort)
-}
-
-func SetupApp(API *Api) *fiber.App {
-	app := fiber.New()
-
-	app.Get("/status", func(c *fiber.Ctx) {
-		c.Status(fiber.StatusOK)
-	})
-
-	app.Post("/spending", API.HandleCreateSpending)
-	app.Get("/spendings", API.HandleGetSpendings)
-
-	return app
-}
-
-func setConfig() {
-	config = Config{
-		AppPort:         12345,
-		Host:            "http://localhost:12345",
-		DBReplicaSetUrl: "mongodb+srv://admin:HkJpLyv1MclTvMIc@spendingtraacker.ybzvy6n.mongodb.net/?retryWrites=true&w=majority",
-	}
-}

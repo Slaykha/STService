@@ -15,6 +15,42 @@ func NewAPI(service *Service) *Api {
 	}
 }
 
+func (a *Api) HandleUserCreate(c *fiber.Ctx) {
+	var userDTO models.UserRegisterDTO
+
+	err := c.BodyParser(&userDTO)
+	if err != nil {
+		c.Status(fiber.StatusBadRequest)
+	}
+
+	user, err := a.service.CreateUser(userDTO)
+	switch err {
+	case nil:
+		c.JSON(user)
+		c.Status(fiber.StatusCreated)
+	default:
+		c.Status(fiber.StatusInternalServerError)
+	}
+}
+
+func (a *Api) HandleUserLogin(c *fiber.Ctx) {
+	var userDTO models.UserLoginDTO
+
+	err := c.BodyParser(&userDTO)
+	if err != nil {
+		c.Status(fiber.StatusBadRequest)
+	}
+
+	user, err := a.service.UserLogin(userDTO)
+	switch err {
+	case nil:
+		c.JSON(user)
+		c.Status(fiber.StatusOK)
+	default:
+		c.Status(fiber.StatusInternalServerError)
+	}
+}
+
 func (a *Api) HandleCreateSpending(c *fiber.Ctx) {
 
 	spendingDTO := models.SpendingDTO{}

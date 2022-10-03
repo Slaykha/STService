@@ -30,6 +30,39 @@ func NewRepository(dbReplicaSetUrl string) *Repository {
 	return &Repository{client}
 }
 
+func (r *Repository) CreateUser(user models.User) error {
+	collection := r.client.Database("user").Collection("users")
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	_, err := collection.InsertOne(ctx, user)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *Repository) FindUser(email string) (*models.User, error) {
+	collection := r.client.Database("user").Collection("users")
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	filter := bson.M{"email": email}
+
+	result := collection.FindOne(ctx, filter)
+
+	user := models.User{}
+	err := result.Decode(&user)
+	if err != nil {
+		fmt.Println("1")
+		return nil, err
+	}
+
+	return &user, err
+}
+
 func (r *Repository) CreateSpending(spending models.Spending) error {
 	collection := r.client.Database("spending").Collection("spendings")
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
