@@ -19,7 +19,7 @@ func (a *Api) HandleCreateSpending(c *fiber.Ctx) {
 
 	spendingDTO := models.SpendingDTO{}
 	err := c.BodyParser(&spendingDTO)
-	if err != nil{
+	if err != nil {
 		c.Status(fiber.StatusBadRequest)
 	}
 
@@ -31,4 +31,17 @@ func (a *Api) HandleCreateSpending(c *fiber.Ctx) {
 	default:
 		c.Status(fiber.StatusInternalServerError)
 	}
+}
+
+func (a *Api) HandleGetSpendings(c *fiber.Ctx) {
+	spendings, err := a.service.GetSpendings()
+
+	switch err {
+	case nil:
+		c.JSON(spendings)
+		c.Status(fiber.StatusOK)
+	default:
+		c.Status(fiber.StatusInternalServerError)
+	}
+
 }

@@ -85,6 +85,7 @@ func SetupApp(API *Api) *fiber.App {
 	})
 
 	app.Post("/spending", API.HandleCreateSpending)
+	app.Get("/spendings", API.HandleGetSpendings)
 
 	return app
 }

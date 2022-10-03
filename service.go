@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strings"
 	"time"
 
@@ -34,6 +35,17 @@ func (s *Service) CreateSpending(spendingDTO models.SpendingDTO) (*models.Spendi
 	}
 
 	return &spending, err
+}
+
+func (s *Service) GetSpendings() ([]models.Spending, error) {
+	spendings, err := s.repository.GetSpendings()
+	if err != nil {
+		fmt.Println("1")
+		return nil, err
+	}
+
+	return spendings, err
+
 }
 
 func createID() (id string) {
