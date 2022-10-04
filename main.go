@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 
+	"github.com/gofiber/cors"
 	"github.com/gofiber/fiber"
 )
 
@@ -26,12 +27,6 @@ func main() {
 
 	fmt.Println("Order List service started at ", config.AppPort, "  ...")
 
-	app.Listen(config.AppPort)
-}
-
-func SetupApp(API *Api) *fiber.App {
-	app := fiber.New()
-
 	app.Get("/status", func(c *fiber.Ctx) {
 		c.Status(fiber.StatusOK)
 	})
@@ -43,6 +38,17 @@ func SetupApp(API *Api) *fiber.App {
 	//Spending
 	app.Post("/spending/:userID", API.HandleCreateSpending)
 	app.Get("/spendings/:userID", API.HandleGetSpendings)
+
+	app.Listen(config.AppPort)
+}
+
+func SetupApp(API *Api) *fiber.App {
+	app := fiber.New()
+
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: []string{"http://localhost:3000"},
+		AllowHeaders: []string{"Origin, Content-Type, Accept"},
+	}))
 
 	return app
 }
