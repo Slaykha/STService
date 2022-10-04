@@ -58,6 +58,7 @@ func (s *Service) CreateSpending(spendingDTO models.SpendingDTO) (*models.Spendi
 
 	spending := models.Spending{
 		ID:           createID(),
+		UserID:       spendingDTO.UserID,
 		Money:        spendingDTO.Money,
 		Currency:     spendingDTO.Currency,
 		SpendingType: spendingDTO.SpendingType,

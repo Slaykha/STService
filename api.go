@@ -52,8 +52,10 @@ func (a *Api) HandleUserLogin(c *fiber.Ctx) {
 }
 
 func (a *Api) HandleCreateSpending(c *fiber.Ctx) {
+	userId := c.Params("userID")
 
 	spendingDTO := models.SpendingDTO{}
+	spendingDTO.UserID = userId
 	err := c.BodyParser(&spendingDTO)
 	if err != nil {
 		c.Status(fiber.StatusBadRequest)
