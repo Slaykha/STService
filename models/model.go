@@ -25,12 +25,14 @@ type UserLoginDTO struct {
 
 type Spending struct {
 	ID           string    `json:"_id" bson:"_id"`
+	UserID       string    `json:"userId" bson:"userId"`
 	Money        float64   `json:"money" bson:"money"`
 	Currency     string    `json:"currency" bson:"currency"`
 	SpendingType string    `json:"spendingType" bson:"spendingType"`
 	SpendingDate time.Time `json:"spendingDate" bson:"spendingDate"`
 }
 type SpendingDTO struct {
+	UserID       string  `json:"userId" bson:"userId"`
 	Money        float64 `json:"money" bson:"money"`
 	Currency     string  `json:"currency" bson:"currency"`
 	SpendingType string  `json:"spendingType" bson:"spendingType"`
