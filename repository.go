@@ -77,16 +77,16 @@ func (r *Repository) CreateSpending(spending models.Spending) error {
 	return nil
 }
 
-func (r *Repository) GetSpendings() ([]models.Spending, error) {
+func (r *Repository) GetSpendings(userID string) ([]models.Spending, error) {
 	collection := r.client.Database("spending").Collection("spendings")
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	var spendings []models.Spending
 
-	emptyFilter := bson.M{}
+	filter := bson.M{"userId": userID}
 
-	result, err := collection.Find(ctx, emptyFilter)
+	result, err := collection.Find(ctx, filter)
 	if err != nil {
 		fmt.Println("2")
 		return nil, err

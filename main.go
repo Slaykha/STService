@@ -42,7 +42,7 @@ func SetupApp(API *Api) *fiber.App {
 
 	//Spending
 	app.Post("/spending/:userID", API.HandleCreateSpending)
-	app.Get("/spendings", API.HandleGetSpendings)
+	app.Get("/spendings/:userID", API.HandleGetSpendings)
 
 	return app
 }

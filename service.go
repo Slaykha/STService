@@ -73,8 +73,8 @@ func (s *Service) CreateSpending(spendingDTO models.SpendingDTO) (*models.Spendi
 	return &spending, err
 }
 
-func (s *Service) GetSpendings() ([]models.Spending, error) {
-	spendings, err := s.repository.GetSpendings()
+func (s *Service) GetSpendings(userID string) ([]models.Spending, error) {
+	spendings, err := s.repository.GetSpendings(userID)
 	if err != nil {
 		fmt.Println("1")
 		return nil, err

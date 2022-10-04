@@ -72,7 +72,9 @@ func (a *Api) HandleCreateSpending(c *fiber.Ctx) {
 }
 
 func (a *Api) HandleGetSpendings(c *fiber.Ctx) {
-	spendings, err := a.service.GetSpendings()
+	userID := c.Params("userID")
+
+	spendings, err := a.service.GetSpendings(userID)
 
 	switch err {
 	case nil:
