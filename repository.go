@@ -31,7 +31,7 @@ func NewRepository(dbReplicaSetUrl string) *Repository {
 }
 
 func (r *Repository) CreateUser(user models.User) error {
-	collection := r.client.Database("user").Collection("users")
+	collection := r.client.Database("spending").Collection("users")
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
@@ -45,7 +45,7 @@ func (r *Repository) CreateUser(user models.User) error {
 }
 
 func (r *Repository) FindUser(email string) (*models.User, error) {
-	collection := r.client.Database("user").Collection("users")
+	collection := r.client.Database("spending").Collection("users")
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/Slaykha/STService/errors"
 	"github.com/Slaykha/STService/models"
 	"github.com/gofiber/fiber"
 )
@@ -46,6 +47,9 @@ func (a *Api) HandleUserLogin(c *fiber.Ctx) {
 	case nil:
 		c.JSON(user)
 		c.Status(fiber.StatusOK)
+	case errors.LoginCredentialsWrong:
+		c.JSON(err.Error())
+		c.Status(fiber.StatusNotFound)
 	default:
 		c.Status(fiber.StatusInternalServerError)
 	}

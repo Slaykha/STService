@@ -5,6 +5,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Slaykha/STService/errors"
 	"github.com/Slaykha/STService/models"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
@@ -47,8 +48,7 @@ func (s *Service) UserLogin(userDTO models.UserLoginDTO) (*models.User, error) {
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(userDTO.Password))
 	if err != nil {
-		fmt.Println("2", err)
-		return nil, err
+		return nil, errors.LoginCredentialsWrong
 	}
 
 	return user, nil
