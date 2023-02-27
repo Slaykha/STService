@@ -1,7 +1,10 @@
 package main
 
 import (
+	"time"
+
 	"github.com/Slaykha/STService/errors"
+	"github.com/Slaykha/STService/helpers"
 	"github.com/Slaykha/STService/models"
 	"github.com/gofiber/fiber"
 )
@@ -43,9 +46,18 @@ func (a *Api) HandleUserLogin(c *fiber.Ctx) {
 	}
 
 	user, err := a.service.UserLogin(userDTO)
+
 	switch err {
 	case nil:
-		c.JSON(user)
+		cookie := fiber.Cookie{
+			Name:     "user_token",
+			Value:    helpers.CreateUserToken(user.ID),
+			Expires:  time.Now().Add(time.Hour * 24),
+			HTTPOnly: true,
+		}
+
+		c.Cookie(&cookie)
+		c.JSON(fiber.Map{"message": "success"})
 		c.Status(fiber.StatusOK)
 	case errors.LoginCredentialsWrong:
 		c.JSON(err.Error())

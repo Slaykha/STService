@@ -5,6 +5,8 @@ go 1.17
 require (
 	github.com/gofiber/cors v0.2.2
 	github.com/gofiber/fiber v1.14.6
+	github.com/golang-jwt/jwt v3.2.2+incompatible
+	github.com/golang-jwt/jwt/v4 v4.5.0
 	github.com/google/uuid v1.3.0
 	go.mongodb.org/mongo-driver v1.10.2
 	golang.org/x/crypto v0.0.0-20220926161630-eccd6366d1be

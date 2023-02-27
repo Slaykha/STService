@@ -2,12 +2,11 @@ package main
 
 import (
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/Slaykha/STService/errors"
+	"github.com/Slaykha/STService/helpers"
 	"github.com/Slaykha/STService/models"
-	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -25,7 +24,7 @@ func (s *Service) CreateUser(userDTO models.UserRegisterDTO) (*models.User, erro
 
 	password, _ := bcrypt.GenerateFromPassword([]byte(userDTO.Password), 8)
 	user := models.User{
-		ID:        createID(),
+		ID:        helpers.CreateID(),
 		Name:      userDTO.Name,
 		Email:     userDTO.Email,
 		Password:  password,
@@ -57,7 +56,7 @@ func (s *Service) UserLogin(userDTO models.UserLoginDTO) (*models.User, error) {
 func (s *Service) CreateSpending(spendingDTO models.SpendingDTO) (*models.Spending, error) {
 
 	spending := models.Spending{
-		ID:           createID(),
+		ID:           helpers.CreateID(),
 		UserID:       spendingDTO.UserID,
 		Money:        spendingDTO.Money,
 		Currency:     spendingDTO.Currency,
@@ -82,14 +81,4 @@ func (s *Service) GetSpendings(userID string) ([]models.Spending, error) {
 
 	return spendings, err
 
-}
-
-func createID() (id string) {
-	id = uuid.New().String()
-
-	id = strings.ReplaceAll(id, "-", "")
-
-	id = id[0:8]
-
-	return
 }
