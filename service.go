@@ -7,6 +7,7 @@ import (
 	"github.com/Slaykha/STService/errors"
 	"github.com/Slaykha/STService/helpers"
 	"github.com/Slaykha/STService/models"
+	"github.com/golang-jwt/jwt"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -51,6 +52,13 @@ func (s *Service) UserLogin(userDTO models.UserLoginDTO) (*models.User, error) {
 	}
 
 	return user, nil
+}
+
+func (s *Service) GetUser(claims *jwt.StandardClaims) models.UserAuth {
+
+	user := s.repository.GetUser(claims)
+
+	return *user
 }
 
 func (s *Service) CreateSpending(spendingDTO models.SpendingDTO) (*models.Spending, error) {

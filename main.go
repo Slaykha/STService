@@ -34,6 +34,8 @@ func main() {
 	//User
 	app.Post("/user/register", API.HandleUserCreate)
 	app.Post("/user/login", API.HandleUserLogin)
+	app.Post("/user/logout", API.HandleUserLogout)
+	app.Get("/user/token", API.HandleGetUser)
 
 	//Spending
 	app.Post("/spending/:userID", API.HandleCreateSpending)

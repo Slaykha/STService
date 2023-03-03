@@ -18,6 +18,13 @@ type UserRegisterDTO struct {
 	Password string `json:"password" bson:"password"`
 }
 
+type UserAuth struct {
+	ID        string    `json:"_id" bson:"_id"`
+	Name      string    `json:"name" bson:"name"`
+	Email     string    `json:"email" bson:"email"`
+	CreatedAt time.Time `json:"createdAt" bson:"createdAt"`
+}
+
 type UserLoginDTO struct {
 	Email    string `json:"email" bson:"email"`
 	Password string `json:"password" bson:"password"`

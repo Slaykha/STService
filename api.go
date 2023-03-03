@@ -7,6 +7,7 @@ import (
 	"github.com/Slaykha/STService/helpers"
 	"github.com/Slaykha/STService/models"
 	"github.com/gofiber/fiber"
+	"github.com/golang-jwt/jwt"
 )
 
 type Api struct {
@@ -65,6 +66,49 @@ func (a *Api) HandleUserLogin(c *fiber.Ctx) {
 	default:
 		c.Status(fiber.StatusInternalServerError)
 	}
+}
+
+func (a *Api) HandleUserLogout(c *fiber.Ctx) {
+	cookie := fiber.Cookie{
+		Name:     "user_token",
+		Value:    "",
+		Expires:  time.Now().Add(-time.Hour),
+		HTTPOnly: true,
+	}
+
+	c.Cookie(&cookie)
+	c.JSON(fiber.Map{"message": "success"})
+	c.Status(fiber.StatusOK)
+}
+
+func (a *Api) HandleGetUser(c *fiber.Ctx) {
+	cookie := c.Cookies("user_token")
+
+	token, err := jwt.ParseWithClaims(cookie, &jwt.StandardClaims{}, tokenReturn)
+	if err != nil {
+		c.Status(fiber.StatusUnauthorized)
+		c.JSON(fiber.Map{
+			"message": "unauthorized",
+		})
+		return
+	}
+
+	claims := token.Claims.(*jwt.StandardClaims)
+
+	var user models.UserAuth
+
+	user = a.service.GetUser(claims)
+
+	switch err {
+	case nil:
+		c.JSON(user)
+	default:
+		c.Status(fiber.StatusInternalServerError)
+	}
+}
+
+func tokenReturn(token *jwt.Token) (interface{}, error) {
+	return []byte(helpers.SecretKey), nil
 }
 
 func (a *Api) HandleCreateSpending(c *fiber.Ctx) {

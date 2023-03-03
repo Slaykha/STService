@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/Slaykha/STService/models"
+	"github.com/golang-jwt/jwt"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -61,6 +62,22 @@ func (r *Repository) FindUser(email string) (*models.User, error) {
 	}
 
 	return &user, err
+}
+
+func (r *Repository) GetUser(claims *jwt.StandardClaims) *models.UserAuth {
+	collection := r.client.Database("spending").Collection("users")
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	fmt.Println(claims.Issuer)
+	filter := bson.M{"_id": claims.Issuer}
+
+	result := collection.FindOne(ctx, filter)
+
+	user := models.UserAuth{}
+	result.Decode(&user)
+
+	return &user
 }
 
 func (r *Repository) CreateSpending(spending models.Spending) error {
