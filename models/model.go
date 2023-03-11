@@ -5,7 +5,7 @@ import (
 )
 
 type User struct {
-	ID        string    `json:"_id" bson:"_id"`
+	ID        string    `json:"id" bson:"id"`
 	Name      string    `json:"name" bson:"name"`
 	Email     string    `json:"email" bson:"email"`
 	Password  []byte    `json:"password" bson:"password"`
@@ -19,7 +19,7 @@ type UserRegisterDTO struct {
 }
 
 type UserAuth struct {
-	ID        string    `json:"_id" bson:"_id"`
+	ID        string    `json:"id" bson:"id"`
 	Name      string    `json:"name" bson:"name"`
 	Email     string    `json:"email" bson:"email"`
 	CreatedAt time.Time `json:"createdAt" bson:"createdAt"`
@@ -31,7 +31,7 @@ type UserLoginDTO struct {
 }
 
 type Spending struct {
-	ID           string    `json:"_id" bson:"_id"`
+	ID           string    `json:"id" bson:"id"`
 	UserID       string    `json:"userId" bson:"userId"`
 	Money        float64   `json:"money" bson:"money"`
 	Currency     string    `json:"currency" bson:"currency"`
