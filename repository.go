@@ -67,7 +67,7 @@ func (r *Repository) GetUser(claims *jwt.StandardClaims) *models.UserAuth {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	filter := bson.M{"_id": claims.Issuer}
+	filter := bson.M{"id": claims.Issuer}
 
 	result := collection.FindOne(ctx, filter)
 
