@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/Slaykha/STService/errors"
@@ -42,7 +41,6 @@ func (s *Service) CreateUser(userDTO models.UserRegisterDTO) (*models.User, erro
 func (s *Service) UserLogin(userDTO models.UserLoginDTO) (*models.User, error) {
 	user, err := s.repository.FindUser(userDTO.Email)
 	if err != nil {
-		fmt.Println("1", err)
 		return nil, err
 	}
 
@@ -83,7 +81,6 @@ func (s *Service) CreateSpending(spendingDTO models.SpendingDTO) (*models.Spendi
 func (s *Service) GetSpendings(userID string) ([]models.Spending, error) {
 	spendings, err := s.repository.GetSpendings(userID)
 	if err != nil {
-		fmt.Println("1")
 		return nil, err
 	}
 

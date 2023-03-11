@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"time"
 
@@ -57,7 +56,6 @@ func (r *Repository) FindUser(email string) (*models.User, error) {
 	user := models.User{}
 	err := result.Decode(&user)
 	if err != nil {
-		fmt.Println("1")
 		return nil, err
 	}
 
@@ -69,7 +67,6 @@ func (r *Repository) GetUser(claims *jwt.StandardClaims) *models.UserAuth {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	fmt.Println(claims.Issuer)
 	filter := bson.M{"_id": claims.Issuer}
 
 	result := collection.FindOne(ctx, filter)
@@ -105,7 +102,6 @@ func (r *Repository) GetSpendings(userID string) ([]models.Spending, error) {
 
 	result, err := collection.Find(ctx, filter)
 	if err != nil {
-		fmt.Println("2")
 		return nil, err
 	}
 
@@ -113,7 +109,6 @@ func (r *Repository) GetSpendings(userID string) ([]models.Spending, error) {
 		spending := models.Spending{}
 		err := result.Decode(&spending)
 		if err != nil {
-			fmt.Println("3")
 			return nil, err
 		}
 
@@ -121,7 +116,6 @@ func (r *Repository) GetSpendings(userID string) ([]models.Spending, error) {
 	}
 
 	if err != nil {
-		fmt.Println("4")
 		return nil, err
 	}
 

@@ -25,7 +25,7 @@ func main() {
 
 	app := SetupApp(API)
 
-	fmt.Println("Order List service started at ", config.AppPort, "  ...")
+	fmt.Println("Spending Tracker service started at ", config.AppPort, "  ...")
 
 	app.Get("/status", func(c *fiber.Ctx) {
 		c.Status(fiber.StatusOK)
