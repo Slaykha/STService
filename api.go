@@ -31,6 +31,14 @@ func (a *Api) HandleUserCreate(c *fiber.Ctx) {
 	user, err := a.service.CreateUser(userDTO)
 	switch err {
 	case nil:
+		cookie := fiber.Cookie{
+			Name:     "user_token",
+			Value:    helpers.CreateUserToken(user.ID),
+			Expires:  time.Now().Add(time.Hour * 24),
+			HTTPOnly: true,
+		}
+
+		c.Cookie(&cookie)
 		c.JSON(user)
 		c.Status(fiber.StatusCreated)
 	default:
