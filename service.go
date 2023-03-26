@@ -28,6 +28,7 @@ func (s *Service) CreateUser(userDTO models.UserRegisterDTO) (*models.User, erro
 		Name:      userDTO.Name,
 		Email:     userDTO.Email,
 		Password:  password,
+		Currency:  userDTO.Currency,
 		CreatedAt: time.Now().UTC(),
 	}
 
@@ -65,7 +66,6 @@ func (s *Service) CreateSpending(spendingDTO models.SpendingDTO) (*models.Spendi
 		ID:           helpers.CreateID(),
 		UserID:       spendingDTO.UserID,
 		Money:        spendingDTO.Money,
-		Currency:     spendingDTO.Currency,
 		SpendingType: spendingDTO.SpendingType,
 		SpendingDate: time.Now().UTC(),
 	}
