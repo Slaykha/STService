@@ -121,3 +121,18 @@ func (r *Repository) GetSpendings(userID string) ([]models.Spending, error) {
 
 	return spendings, nil
 }
+
+func (r *Repository) DeleteSpending(spendingID string) error {
+	collection := r.client.Database("spending").Collection("spendings")
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	filter := bson.M{"id": spendingID}
+
+	result := collection.FindOneAndDelete(ctx, filter)
+	if result != nil {
+		return result.Err()
+	}
+
+	return nil
+}

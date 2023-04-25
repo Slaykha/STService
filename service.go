@@ -87,3 +87,12 @@ func (s *Service) GetSpendings(userID string) ([]models.Spending, error) {
 	return spendings, err
 
 }
+
+func (s *Service) DeleteSpending(spendingID string) error {
+	err := s.repository.DeleteSpending(spendingID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

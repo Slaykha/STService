@@ -120,7 +120,7 @@ func tokenReturn(token *jwt.Token) (interface{}, error) {
 }
 
 func (a *Api) HandleCreateSpending(c *fiber.Ctx) {
-	userId := c.Params("userID")
+	userId := c.Params("userId")
 
 	spendingDTO := models.SpendingDTO{}
 	spendingDTO.UserID = userId
@@ -140,7 +140,7 @@ func (a *Api) HandleCreateSpending(c *fiber.Ctx) {
 }
 
 func (a *Api) HandleGetSpendings(c *fiber.Ctx) {
-	userID := c.Params("userID")
+	userID := c.Params("userId")
 
 	spendings, err := a.service.GetSpendings(userID)
 
@@ -152,4 +152,17 @@ func (a *Api) HandleGetSpendings(c *fiber.Ctx) {
 		c.Status(fiber.StatusInternalServerError)
 	}
 
+}
+
+func (a *Api) HandleDeleteSpending(c *fiber.Ctx) {
+	spendingID := c.Params("spendingId")
+
+	err := a.service.DeleteSpending(spendingID)
+
+	switch err {
+	case nil:
+		c.Status(fiber.StatusOK)
+	default:
+		c.Status(fiber.StatusInternalServerError)
+	}
 }

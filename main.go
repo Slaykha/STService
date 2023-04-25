@@ -38,8 +38,9 @@ func main() {
 	app.Get("/user/token", API.HandleGetUser)
 
 	//Spending
-	app.Post("/spending/:userID", API.HandleCreateSpending)
-	app.Get("/spendings/:userID", API.HandleGetSpendings)
+	app.Post("/spending/:userId", API.HandleCreateSpending)
+	app.Get("/spendings/:userId", API.HandleGetSpendings)
+	app.Delete("/spending/:spendingId", API.HandleDeleteSpending)
 
 	app.Listen(config.AppPort)
 }
