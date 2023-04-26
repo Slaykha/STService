@@ -53,11 +53,29 @@ func (s *Service) UserLogin(userDTO models.UserLoginDTO) (*models.User, error) {
 	return user, nil
 }
 
-func (s *Service) GetUser(claims *jwt.StandardClaims) models.UserAuth {
+func (s *Service) GetUser(claims *jwt.StandardClaims) (*models.UserAuth, error) {
 
-	user := s.repository.GetUser(claims)
+	user, err := s.repository.GetUserInfo(claims.Issuer)
+	if err != nil {
+		return nil, err
+	}
 
-	return *user
+	return user, nil
+}
+
+func (s *Service) UpdateUserDailySpending(userId string, userDailySpending models.UserDailySpendingDTO) (*models.UserAuth, error) {
+	userModel, err := s.repository.GetUser(userId)
+	if err != nil {
+		return nil, err
+	}
+	userModel.DailyLimit = userDailySpending.DailyLimit
+
+	updatedUser, err := s.repository.UpdateUserDailySpending(*userModel)
+	if err != nil {
+		return nil, err
+	}
+
+	return updatedUser, nil
 }
 
 func (s *Service) CreateSpending(spendingDTO models.SpendingDTO) (*models.Spending, error) {

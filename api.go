@@ -103,9 +103,7 @@ func (a *Api) HandleGetUser(c *fiber.Ctx) {
 
 	claims := token.Claims.(*jwt.StandardClaims)
 
-	var user models.UserAuth
-
-	user = a.service.GetUser(claims)
+	user, err := a.service.GetUser(claims)
 
 	switch err {
 	case nil:
@@ -117,6 +115,27 @@ func (a *Api) HandleGetUser(c *fiber.Ctx) {
 
 func tokenReturn(token *jwt.Token) (interface{}, error) {
 	return []byte(helpers.SecretKey), nil
+}
+
+func (a *Api) HandleUpdateUserDailySpending(c *fiber.Ctx) {
+	userId := c.Params("id")
+	userDailySpending := models.UserDailySpendingDTO{}
+
+	err := c.BodyParser(&userDailySpending)
+	if err != nil {
+		c.Status(fiber.StatusBadRequest)
+	}
+
+	updatedUser, err := a.service.UpdateUserDailySpending(userId, userDailySpending)
+
+	switch err {
+	case nil:
+		c.JSON(updatedUser)
+		c.Status(fiber.StatusOK)
+	default:
+		c.Status(fiber.StatusInternalServerError)
+	}
+
 }
 
 func (a *Api) HandleCreateSpending(c *fiber.Ctx) {

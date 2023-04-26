@@ -5,12 +5,13 @@ import (
 )
 
 type User struct {
-	ID        string    `json:"id" bson:"id"`
-	Name      string    `json:"name" bson:"name"`
-	Email     string    `json:"email" bson:"email"`
-	Password  []byte    `json:"password" bson:"password"`
-	Currency  string    `json:"currency" bson:"currency"`
-	CreatedAt time.Time `json:"createdAt" bson:"createdAt"`
+	ID         string    `json:"id" bson:"id"`
+	Name       string    `json:"name" bson:"name"`
+	Email      string    `json:"email" bson:"email"`
+	Password   []byte    `json:"password" bson:"password"`
+	Currency   string    `json:"currency" bson:"currency"`
+	DailyLimit float64   `json:"dailyLimit" bson:"dailyLimit"`
+	CreatedAt  time.Time `json:"createdAt" bson:"createdAt"`
 }
 
 type UserRegisterDTO struct {
@@ -21,16 +22,21 @@ type UserRegisterDTO struct {
 }
 
 type UserAuth struct {
-	ID        string    `json:"id" bson:"id"`
-	Name      string    `json:"name" bson:"name"`
-	Email     string    `json:"email" bson:"email"`
-	Currency  string    `json:"currency" bson:"currency"`
-	CreatedAt time.Time `json:"createdAt" bson:"createdAt"`
+	ID         string    `json:"id" bson:"id"`
+	Name       string    `json:"name" bson:"name"`
+	Email      string    `json:"email" bson:"email"`
+	Currency   string    `json:"currency" bson:"currency"`
+	DailyLimit float64   `json:"dailyLimit" bson:"dailyLimit"`
+	CreatedAt  time.Time `json:"createdAt" bson:"createdAt"`
 }
 
 type UserLoginDTO struct {
 	Email    string `json:"email" bson:"email"`
 	Password string `json:"password" bson:"password"`
+}
+
+type UserDailySpendingDTO struct {
+	DailyLimit float64 `json:"dailyLimit" bson:"dailyLimit"`
 }
 
 type Spending struct {

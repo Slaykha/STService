@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/Slaykha/STService/models"
-	"github.com/golang-jwt/jwt"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -62,19 +61,57 @@ func (r *Repository) FindUser(email string) (*models.User, error) {
 	return &user, err
 }
 
-func (r *Repository) GetUser(claims *jwt.StandardClaims) *models.UserAuth {
+func (r *Repository) GetUserInfo(userId string) (*models.UserAuth, error) {
 	collection := r.client.Database("spending").Collection("users")
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	filter := bson.M{"id": claims.Issuer}
+	filter := bson.M{"id": userId}
 
 	result := collection.FindOne(ctx, filter)
 
 	user := models.UserAuth{}
-	result.Decode(&user)
+	err := result.Decode(&user)
+	if err != nil {
+		return nil, err
+	}
 
-	return &user
+	return &user, nil
+}
+
+func (r *Repository) GetUser(userId string) (*models.User, error) {
+	collection := r.client.Database("spending").Collection("users")
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	filter := bson.M{"id": userId}
+
+	result := collection.FindOne(ctx, filter)
+
+	user := models.User{}
+	err := result.Decode(&user)
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
+func (r *Repository) UpdateUserDailySpending(userModel models.User) (*models.UserAuth, error) {
+	collection := r.client.Database("spending").Collection("users")
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	filter := bson.M{"id": userModel.ID}
+
+	collection.FindOneAndReplace(ctx, filter, userModel)
+
+	updatedUser, err := r.GetUserInfo(userModel.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return updatedUser, nil
 }
 
 func (r *Repository) CreateSpending(spending models.Spending) error {
