@@ -85,7 +85,7 @@ func (s *Service) CreateSpending(spendingDTO models.SpendingDTO) (*models.Spendi
 		UserID:       spendingDTO.UserID,
 		Money:        spendingDTO.Money,
 		SpendingType: spendingDTO.SpendingType,
-		SpendingDate: time.Now().UTC(),
+		SpendingDate: spendingDTO.SpendingDate,
 	}
 
 	err := s.repository.CreateSpending(spending)

@@ -47,7 +47,8 @@ type Spending struct {
 	SpendingDate time.Time `json:"spendingDate" bson:"spendingDate"`
 }
 type SpendingDTO struct {
-	UserID       string  `json:"userId" bson:"userId"`
-	Money        float64 `json:"money" bson:"money"`
-	SpendingType string  `json:"spendingType" bson:"spendingType"`
+	UserID       string    `json:"userId" bson:"userId"`
+	Money        float64   `json:"money" bson:"money"`
+	SpendingType string    `json:"spendingType" bson:"spendingType"`
+	SpendingDate time.Time `json:"spendingDate" bson:"spendingDate"`
 }
