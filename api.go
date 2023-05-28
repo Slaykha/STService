@@ -35,7 +35,7 @@ func (a *Api) HandleUserCreate(c *fiber.Ctx) {
 			Name:     "user_token",
 			Value:    helpers.CreateUserToken(user.ID),
 			Expires:  time.Now().Add(time.Hour * 24),
-			HTTPOnly: true,
+			HTTPOnly: false,
 		}
 
 		c.Cookie(&cookie)
@@ -62,7 +62,7 @@ func (a *Api) HandleUserLogin(c *fiber.Ctx) {
 			Name:     "user_token",
 			Value:    helpers.CreateUserToken(user.ID),
 			Expires:  time.Now().Add(time.Hour * 24),
-			HTTPOnly: true,
+			HTTPOnly: false,
 		}
 
 		c.Cookie(&cookie)
@@ -81,7 +81,7 @@ func (a *Api) HandleUserLogout(c *fiber.Ctx) {
 		Name:     "user_token",
 		Value:    "",
 		Expires:  time.Now().Add(-time.Hour),
-		HTTPOnly: true,
+		HTTPOnly: false,
 	}
 
 	c.Cookie(&cookie)
