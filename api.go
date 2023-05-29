@@ -185,3 +185,17 @@ func (a *Api) HandleDeleteSpending(c *fiber.Ctx) {
 		c.Status(fiber.StatusInternalServerError)
 	}
 }
+
+func (a *Api) HandleGetTodaysTotal(c *fiber.Ctx) {
+	userId := c.Params("userId")
+
+	total, err := a.service.GetTodaysTotal(userId)
+
+	switch err {
+	case nil:
+		c.JSON(total)
+		c.Status(fiber.StatusOK)
+	default:
+		c.Status(fiber.StatusInternalServerError)
+	}
+}
