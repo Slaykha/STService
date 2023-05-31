@@ -160,8 +160,15 @@ func (a *Api) HandleCreateSpending(c *fiber.Ctx) {
 
 func (a *Api) HandleGetSpendings(c *fiber.Ctx) {
 	userID := c.Params("userId")
+	date := c.Query("date")
+	spendingType := c.Query("type")
 
-	spendings, err := a.service.GetSpendings(userID)
+	dateFilter, err := time.Parse("2006-01-02", date)
+	if err != nil {
+		c.Status(fiber.StatusBadGateway)
+	}
+
+	spendings, err := a.service.GetSpendings(userID, spendingType, dateFilter)
 
 	switch err {
 	case nil:

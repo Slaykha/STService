@@ -7,6 +7,7 @@ import (
 
 	"github.com/Slaykha/STService/models"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -128,14 +129,22 @@ func (r *Repository) CreateSpending(spending models.Spending) error {
 	return nil
 }
 
-func (r *Repository) GetSpendings(userID string) ([]models.Spending, error) {
+func (r *Repository) GetSpendings(userID, spendingType string, date time.Time) ([]models.Spending, error) {
 	collection := r.client.Database("spending").Collection("spendings")
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	var spendings []models.Spending
 
-	filter := bson.M{"userId": userID}
+	filter := bson.M{
+		"$and": []bson.M{
+			{"userId": userID},
+			{"spendingDate": bson.M{
+				"$gte": primitive.NewDateTimeFromTime(time.Date(date.Year(), date.Month(), date.Day(), 0, 0, 0, 0, time.Now().Location())),
+			}},
+			{"spendingType": spendingType},
+		},
+	}
 
 	result, err := collection.Find(ctx, filter)
 	if err != nil {

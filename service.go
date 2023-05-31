@@ -96,8 +96,8 @@ func (s *Service) CreateSpending(spendingDTO models.SpendingDTO) (*models.Spendi
 	return &spending, err
 }
 
-func (s *Service) GetSpendings(userID string) ([]models.Spending, error) {
-	spendings, err := s.repository.GetSpendings(userID)
+func (s *Service) GetSpendings(userID, spendingType string, date time.Time) ([]models.Spending, error) {
+	spendings, err := s.repository.GetSpendings(userID, spendingType, date)
 	if err != nil {
 		return nil, err
 	}
@@ -116,19 +116,15 @@ func (s *Service) DeleteSpending(spendingID string) error {
 }
 
 func (s *Service) GetTodaysTotal(userId string) (float32, error) {
-	spendings, err := s.repository.GetSpendings(userId)
+	spendings, err := s.repository.GetSpendings(userId, "", time.Now())
 	if err != nil {
 		return 0, err
 	}
 
-	today := time.Now()
-
 	var total float32
 
 	for _, spending := range spendings {
-		if spending.SpendingDate.After(time.Date(today.Year(), today.Month(), today.Day(), 0, 0, 0, today.Nanosecond(), today.Location())) {
-			total += float32(spending.Money)
-		}
+		total += float32(spending.Money)
 	}
 
 	return total, nil
