@@ -142,7 +142,7 @@ func (r *Repository) GetSpendings(userID, spendingType string, date time.Time) (
 			{"spendingDate": bson.M{
 				"$gte": primitive.NewDateTimeFromTime(time.Date(date.Year(), date.Month(), date.Day(), 0, 0, 0, 0, time.Now().Location())),
 			}},
-			{"spendingType": spendingType},
+			{"spendingType": bson.M{"$regex": primitive.Regex{Pattern: spendingType, Options: "i"}}},
 		},
 	}
 
