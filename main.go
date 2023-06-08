@@ -38,6 +38,7 @@ func main() {
 	app.Get("/user/token", API.HandleGetUser)
 	app.Put("/user/:id", API.HandleUpdateUser)
 	app.Put("/user/:id/dailyLimit", API.HandleUpdateUserDailySpending)
+	app.Put("/user/:id/password", API.HandleUpdateUserPassword)
 
 	//Spending
 	app.Post("/spending/:userId", API.HandleCreateSpending)

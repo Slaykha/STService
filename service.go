@@ -96,6 +96,28 @@ func (s *Service) UpdateUserDailySpending(userId string, userDailySpending model
 	return updatedUser, nil
 }
 
+func (s *Service) UpdateUserPassword(userId string, user models.UserPasswordDTO) (*models.UserAuth, error) {
+	userModel, err := s.repository.GetUser(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(userModel.Password), []byte(user.CurrentPassword))
+	if err != nil {
+		return nil, err
+	}
+
+	newPassword, _ := bcrypt.GenerateFromPassword([]byte(user.NewPassword), 8)
+
+	userModel.Password = newPassword
+
+	updatedUser, err := s.repository.UpdateUser(*userModel)
+	if err != nil {
+		return nil, err
+	}
+
+	return updatedUser, nil
+}
 func (s *Service) CreateSpending(spendingDTO models.SpendingDTO) (*models.Spending, error) {
 
 	spending := models.Spending{

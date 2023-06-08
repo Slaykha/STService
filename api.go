@@ -159,6 +159,27 @@ func (a *Api) HandleUpdateUserDailySpending(c *fiber.Ctx) {
 
 }
 
+func (a *Api) HandleUpdateUserPassword(c *fiber.Ctx) {
+	userId := c.Params("id")
+	user := models.UserPasswordDTO{}
+
+	err := c.BodyParser(&user)
+	if err != nil {
+		c.Status(fiber.StatusBadRequest)
+	}
+
+	updatedUser, err := a.service.UpdateUserPassword(userId, user)
+
+	switch err {
+	case nil:
+		c.JSON(updatedUser)
+		c.Status(fiber.StatusOK)
+	default:
+		c.Status(fiber.StatusInternalServerError)
+	}
+
+}
+
 func (a *Api) HandleCreateSpending(c *fiber.Ctx) {
 	userId := c.Params("userId")
 
