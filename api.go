@@ -174,6 +174,9 @@ func (a *Api) HandleUpdateUserPassword(c *fiber.Ctx) {
 	case nil:
 		c.JSON(updatedUser)
 		c.Status(fiber.StatusOK)
+	case errors.WrongPassword:
+		c.JSON(err.Error())
+		c.Status(fiber.StatusNotFound)
 	default:
 		c.Status(fiber.StatusInternalServerError)
 	}

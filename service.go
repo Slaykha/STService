@@ -104,7 +104,7 @@ func (s *Service) UpdateUserPassword(userId string, user models.UserPasswordDTO)
 
 	err = bcrypt.CompareHashAndPassword([]byte(userModel.Password), []byte(user.CurrentPassword))
 	if err != nil {
-		return nil, err
+		return nil, errors.WrongPassword
 	}
 
 	newPassword, _ := bcrypt.GenerateFromPassword([]byte(user.NewPassword), 8)
