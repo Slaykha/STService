@@ -63,6 +63,24 @@ func (s *Service) GetUser(claims *jwt.StandardClaims) (*models.UserAuth, error) 
 	return user, nil
 }
 
+func (s *Service) UpdateUser(userId string, user models.UserDTO) (*models.UserAuth, error) {
+	userModel, err := s.repository.GetUser(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	userModel.Name = user.Name
+	userModel.Email = user.Email
+	userModel.DailyLimit = user.DailyLimit
+
+	updatedUser, err := s.repository.UpdateUser(*userModel)
+	if err != nil {
+		return nil, err
+	}
+
+	return updatedUser, nil
+}
+
 func (s *Service) UpdateUserDailySpending(userId string, userDailySpending models.UserDailySpendingDTO) (*models.UserAuth, error) {
 	userModel, err := s.repository.GetUser(userId)
 	if err != nil {
@@ -70,7 +88,7 @@ func (s *Service) UpdateUserDailySpending(userId string, userDailySpending model
 	}
 	userModel.DailyLimit = userDailySpending.DailyLimit
 
-	updatedUser, err := s.repository.UpdateUserDailySpending(*userModel)
+	updatedUser, err := s.repository.UpdateUser(*userModel)
 	if err != nil {
 		return nil, err
 	}

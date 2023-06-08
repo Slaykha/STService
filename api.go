@@ -117,6 +117,27 @@ func tokenReturn(token *jwt.Token) (interface{}, error) {
 	return []byte(helpers.SecretKey), nil
 }
 
+func (a *Api) HandleUpdateUser(c *fiber.Ctx) {
+	userId := c.Params("id")
+	user := models.UserDTO{}
+
+	err := c.BodyParser(&user)
+	if err != nil {
+		c.Status(fiber.StatusBadRequest)
+	}
+
+	updatedUser, err := a.service.UpdateUser(userId, user)
+
+	switch err {
+	case nil:
+		c.JSON(updatedUser)
+		c.Status(fiber.StatusOK)
+	default:
+		c.Status(fiber.StatusInternalServerError)
+	}
+
+}
+
 func (a *Api) HandleUpdateUserDailySpending(c *fiber.Ctx) {
 	userId := c.Params("id")
 	userDailySpending := models.UserDailySpendingDTO{}

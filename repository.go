@@ -98,7 +98,7 @@ func (r *Repository) GetUser(userId string) (*models.User, error) {
 	return &user, nil
 }
 
-func (r *Repository) UpdateUserDailySpending(userModel models.User) (*models.UserAuth, error) {
+func (r *Repository) UpdateUser(userModel models.User) (*models.UserAuth, error) {
 	collection := r.client.Database("spending").Collection("users")
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()

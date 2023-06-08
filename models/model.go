@@ -35,6 +35,11 @@ type UserLoginDTO struct {
 	Password string `json:"password" bson:"password"`
 }
 
+type UserDTO struct {
+	Name       string  `json:"name" bson:"name"`
+	Email      string  `json:"email" bson:"email"`
+	DailyLimit float64 `json:"dailyLimit" bson:"dailyLimit"`
+}
 type UserDailySpendingDTO struct {
 	DailyLimit float64 `json:"dailyLimit" bson:"dailyLimit"`
 }
