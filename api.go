@@ -207,13 +207,15 @@ func (a *Api) HandleGetSpendings(c *fiber.Ctx) {
 	userID := c.Params("userId")
 	date := c.Query("date")
 	spendingType := c.Query("type")
+	moneySort := c.Query("mSort")
+	dateSort := c.Query("dSort")
 
 	dateFilter, err := time.Parse("2006-01-02", date)
 	if err != nil {
 		c.Status(fiber.StatusBadGateway)
 	}
 
-	spendings, err := a.service.GetSpendings(userID, spendingType, dateFilter)
+	spendings, err := a.service.GetSpendings(userID, spendingType, moneySort, dateSort, dateFilter)
 
 	switch err {
 	case nil:
@@ -246,6 +248,26 @@ func (a *Api) HandleGetTodaysTotal(c *fiber.Ctx) {
 	switch err {
 	case nil:
 		c.JSON(total)
+		c.Status(fiber.StatusOK)
+	default:
+		c.Status(fiber.StatusInternalServerError)
+	}
+}
+
+func (a *Api) HandleUpdateSpending(c *fiber.Ctx) {
+	spendingID := c.Params("spendingId")
+
+	spendingDTO := models.SpendingEditDTO{}
+	err := c.BodyParser(&spendingDTO)
+	if err != nil {
+		c.Status(fiber.StatusBadRequest)
+	}
+
+	spending, err := a.service.UpdateSpending(spendingID, spendingDTO)
+
+	switch err {
+	case nil:
+		c.JSON(spending)
 		c.Status(fiber.StatusOK)
 	default:
 		c.Status(fiber.StatusInternalServerError)

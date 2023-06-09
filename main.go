@@ -45,6 +45,7 @@ func main() {
 	app.Get("/spendings/:userId", API.HandleGetSpendings)
 	app.Delete("/spending/:spendingId", API.HandleDeleteSpending)
 	app.Get("/spendings/:userId/today", API.HandleGetTodaysTotal)
+	app.Put("/spending/spendingId", API.HandleUpdateSpending)
 
 	app.Listen(config.AppPort)
 }

@@ -62,3 +62,9 @@ type SpendingDTO struct {
 	SpendingType string    `json:"spendingType" bson:"spendingType"`
 	SpendingDate time.Time `json:"spendingDate" bson:"spendingDate"`
 }
+
+type SpendingEditDTO struct {
+	Money        float64   `json:"money" bson:"money"`
+	SpendingType string    `json:"spendingType" bson:"spendingType"`
+	SpendingDate time.Time `json:"spendingDate" bson:"spendingDate"`
+}

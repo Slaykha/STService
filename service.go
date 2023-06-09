@@ -136,8 +136,8 @@ func (s *Service) CreateSpending(spendingDTO models.SpendingDTO) (*models.Spendi
 	return &spending, err
 }
 
-func (s *Service) GetSpendings(userID, spendingType string, date time.Time) ([]models.Spending, error) {
-	spendings, err := s.repository.GetSpendings(userID, spendingType, date)
+func (s *Service) GetSpendings(userID, spendingType, moneySort, dateSort string, date time.Time) ([]models.Spending, error) {
+	spendings, err := s.repository.GetSpendings(userID, spendingType, moneySort, dateSort, date)
 	if err != nil {
 		return nil, err
 	}
@@ -156,7 +156,7 @@ func (s *Service) DeleteSpending(spendingID string) error {
 }
 
 func (s *Service) GetTodaysTotal(userId string) (float32, error) {
-	spendings, err := s.repository.GetSpendings(userId, "", time.Now())
+	spendings, err := s.repository.GetSpendings(userId, "", "", "", time.Now())
 	if err != nil {
 		return 0, err
 	}
@@ -168,4 +168,21 @@ func (s *Service) GetTodaysTotal(userId string) (float32, error) {
 	}
 
 	return total, nil
+}
+
+func (s *Service) UpdateSpending(spendingId string, spendingDTO models.SpendingEditDTO) (*models.Spending, error) {
+	spendingModel, err := s.repository.GetSpending(spendingId)
+	if err != nil {
+		return nil, err
+	}
+	spendingModel.Money = spendingDTO.Money
+	spendingModel.SpendingType = spendingDTO.SpendingType
+	spendingModel.SpendingDate = spendingDTO.SpendingDate
+
+	updatedSpending, err := s.repository.UpdateSpending(*spendingModel)
+	if err != nil {
+		return nil, err
+	}
+
+	return updatedSpending, nil
 }

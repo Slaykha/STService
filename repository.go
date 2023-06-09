@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log"
+	"strconv"
 	"time"
 
 	"github.com/Slaykha/STService/models"
@@ -129,7 +130,7 @@ func (r *Repository) CreateSpending(spending models.Spending) error {
 	return nil
 }
 
-func (r *Repository) GetSpendings(userID, spendingType string, date time.Time) ([]models.Spending, error) {
+func (r *Repository) GetSpendings(userID, spendingType, moneySort, dateSort string, date time.Time) ([]models.Spending, error) {
 	collection := r.client.Database("spending").Collection("spendings")
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -146,7 +147,20 @@ func (r *Repository) GetSpendings(userID, spendingType string, date time.Time) (
 		},
 	}
 
-	result, err := collection.Find(ctx, filter)
+	options := options.Find()
+	if dateSort != "" {
+		options.SetSort(bson.D{{"spendingDate", 1}})
+	} else {
+		options.SetSort(bson.D{{"spendingDate", -1}})
+	}
+
+	if moneySort != "" {
+		sort, _ := strconv.Atoi(moneySort)
+
+		options.SetSort(bson.D{{"money", sort}})
+	}
+
+	result, err := collection.Find(ctx, filter, options)
 	if err != nil {
 		return nil, err
 	}
@@ -181,4 +195,46 @@ func (r *Repository) DeleteSpending(spendingID string) error {
 	}
 
 	return nil
+}
+
+func (r *Repository) GetSpending(spendingId string) (*models.Spending, error) {
+	collection := r.client.Database("spending").Collection("spendings")
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	filter := bson.M{"id": spendingId}
+
+	result, err := collection.Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+
+	spending := models.Spending{}
+	err = result.Decode(&spending)
+	if err != nil {
+		return nil, err
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &spending, nil
+}
+
+func (r *Repository) UpdateSpending(spendingModel models.Spending) (*models.Spending, error) {
+	collection := r.client.Database("spending").Collection("spendings")
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	filter := bson.M{"id": spendingModel.ID}
+
+	collection.FindOneAndReplace(ctx, filter, spendingModel)
+
+	updatedUser, err := r.GetSpending(spendingModel.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return updatedUser, nil
 }
