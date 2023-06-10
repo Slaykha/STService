@@ -204,13 +204,10 @@ func (r *Repository) GetSpending(spendingId string) (*models.Spending, error) {
 
 	filter := bson.M{"id": spendingId}
 
-	result, err := collection.Find(ctx, filter)
-	if err != nil {
-		return nil, err
-	}
+	result := collection.FindOne(ctx, filter)
 
 	spending := models.Spending{}
-	err = result.Decode(&spending)
+	err := result.Decode(&spending)
 	if err != nil {
 		return nil, err
 	}
